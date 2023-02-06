@@ -1,0 +1,88 @@
+//Antonio Hernandez CSE 110-104 Lab #6
+// The program will select a random number between 0 and 100, allow the user to try up to 10 times to guess the number, and tell the user if each guess is too high, too low, or correct.
+
+#include <iostream>
+#include <cstdlib> //for random number generation
+#include <ctime> //to repeat without the same number
+
+using namespace std;
+
+void show_rules();
+void game_portion(int2 numGuessed, int2 numTries, int2 high, int2 low, int2 numGenerated);
+
+
+int main()
+{
+    int numGuessed, numTries, high, low, numGenerated, maxValue, minValue, time;
+    char again;
+    show_rules();
+    minValue= 0;
+    maxValue= 100;
+    srand(unsigned(0));//so it doesnt use the same number for every new game
+    numGenerated= (rand() % (maxValue - minValue + 1)) + minValue;//random number generator here
+    game_portion(numGuessed, numTries, high, low, numGenerated);//loop goes in here
+
+
+cout<< "Would you like to play again? Enter (Y/N)"<<endl;
+cin>> again;
+
+    while (again == 'Y' || again == 'y')//play again? and create a copy
+    {
+    show_rules();
+    numGenerated= (rand() % (maxValue - minValue + 1)) + minValue; //random number generator
+    game_portion(numGuessed, numTries, high, low, numGenerated);
+    cout<< "Would you like to play again? Enter (Y/N)"<<endl;
+    cin>> again;
+    }
+    return 0;
+}
+
+void show_rules()
+{
+    cout<<"\t\t"<< "The computer has picked a random number between 0 and 100."<< endl;//"\t" to make tabs
+    cout<<" "<< endl;
+    cout<<"\t\t"<< "You have 10 tries to guess the number...good luck!"<< endl;
+    cout<<" "<< endl;
+}
+
+void game_portion(int2 numGuessed, int2 numTries, int2 high, int2 low, int2 numGenerated)
+{
+numTries=10;
+cout<<"\t\t"<<"Enter a number! ";
+cin>> numGuessed;
+cout<<" "<< endl;
+
+    while (numGuessed != numGenerated && numTries > 0)
+    {
+
+        if (numGuessed > numGenerated)
+        {
+        cout<<"\t\t"<< "You're too high..."<< endl;
+        cout<<"\t\t"<< "Guess again... you have "<< numTries << " tries remaining."<< endl;
+        cout<<" "<< endl;
+        numTries--;
+        cout<<"\t\t"<<"Enter a number! ";
+        cin>> numGuessed;
+        cout<<" "<< endl;
+        }
+        else if (numGuessed < numGenerated)
+        {
+        cout<<"\t\t"<< "You're too low..."<< endl;
+        cout<<"\t\t"<< "Guess again... you have "<< numTries << " tries remaining."<< endl;
+        cout<<" "<< endl;
+        numTries--;
+        cout<<"\t\t"<<"Enter a number! ";
+        cin>> numGuessed;
+        cout<<" "<< endl;
+        }
+
+    }
+            if (numGuessed == numGenerated)
+            {
+            cout<< "YOU WIN! Winner winner chicken dinner!"<<endl;
+            }
+            else
+            {
+            cout<< "YOU LOSE! You must have an IQ lower than the correct answer!"<<endl;
+            }
+}
