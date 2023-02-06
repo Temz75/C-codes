@@ -1,0 +1,55 @@
+//Antonio Hernandez CSE 110 Lab#2
+//Extension of Lab 1
+//This program computes payroll using hours and pay rate including overtime
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+int hoursWorked, doubletimeHours, overtimeHours; //time in here to keep them as whole numbers
+double hourlyRate, basePay, doubletimePay, overtimePay, grossPay; //doubletimePay is overtime at 2x the pay rate above 50 hours, overtime is 1.5x the pay rate between 41-50
+
+cout<< "Enter the hourly rate of pay: $";
+cin>> hourlyRate;
+
+cout<< "Enter the number of hours worked, "<< endl;
+cout<< "rounded to a whole number of hours: ";
+cin>> hoursWorked; //added the {} brackets to clean everything up
+    if (hoursWorked<=40) //there is no overtime
+       {overtimePay=0;
+        overtimeHours=0;
+        doubletimePay=0;
+        doubletimeHours=0;
+        basePay= hoursWorked * hourlyRate;
+       }
+    else if (hoursWorked>=41 && hoursWorked <=50) //there is overtime
+        {overtimePay= (hoursWorked - 40) * (1.50 * hourlyRate);
+        overtimeHours= (hoursWorked-40);
+        basePay=(40 * hourlyRate);
+        doubletimePay=0;
+        doubletimeHours=0;
+        }
+    else if (hoursWorked>=51) //there is doubletime
+        {overtimeHours=10;
+        overtimePay= (10 * 1.50 * hourlyRate);
+        doubletimeHours= (hoursWorked - 50);
+        doubletimePay= (hoursWorked - 50) * (2.00 * hourlyRate);
+        basePay=(40 * hourlyRate);
+        }
+
+
+grossPay= overtimePay + doubletimePay + basePay; //calculate gross pay
+cout<< setprecision(2)<< fixed; //to set the amount of decimal places
+cout<< "Hours worked=" << hoursWorked << endl;
+cout<< "Hourly rate=$" << hourlyRate<< endl;
+cout<< "Base pay=$" << basePay<< endl;
+cout<< "Overtime hours at time and a half=" << overtimeHours << endl;
+cout<< "Overtime pay at time and a half=$" << overtimePay << endl;
+cout<< "Overtime hours at double time=" << doubletimeHours << endl;
+cout<< "Overtime pay at double time=$" << doubletimePay << endl;
+cout<< "Gross pay=$" << grossPay<< endl;
+
+    return 0;
+}
