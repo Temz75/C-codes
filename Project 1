@@ -1,0 +1,137 @@
+   //Antonio Hernandez CSE 110-104 Project 1
+    // To calculates the wind chill factor and cloud base altitude for the inputs temperature in Fahrenheit, wind speed in mph, and the dew point in Fahrenheit. While placing it in a file.
+
+    #include <iostream>
+    #include <cmath> //so the compiler can understand the formula
+    #include <iomanip>// to set decimal places
+    #include <cstdlib> //To use exit statements to test files
+    #include <fstream> //To open and close files
+
+    using namespace std;
+
+    void file_test (ifstream2 infile, ofstream2 outfile);
+    void show_task(ofstream2 outfile);
+    void infile(ifstream2 infile, ofstream2 outfile);
+    double compute_Windchill(double fTemp, double windSpeed);
+    double compute_Cloudbase (double fTemp, double dewPoint);
+    void give_output(double2 fTemp, double2 windSpeed, double2 dewPoint, double2 windChill, double2 cloudBase, ofstream2 outfile);
+    void error_text(ofstream2 outfile);
+
+    int main()
+    {
+        ifstream infile;//infiles replace cins
+        ofstream outfile;//outfiles replace couts
+        double fTemp, windSpeed, dewPoint, windChill, cloudBase;
+        bool errorText= false;
+        file_test(infile, outfile);
+        show_task(outfile);
+        while (!infile.eof())//loops until the file is invalid or there are no more numbers left to read
+            {
+            infile>> fTemp >> windSpeed >> dewPoint;//infile replaces cin
+
+            if (fTemp > 50 || windSpeed <= 3)//bool true/false determining statement
+                errorText=true;
+
+            if (fTemp <= 50 && windSpeed > 3)
+            windChill= compute_Windchill(fTemp, windSpeed);//to get *** if it does not meet the if statement requirements
+
+            cloudBase= compute_Cloudbase(fTemp, dewPoint);
+            give_output(fTemp, windSpeed, dewPoint, windChill, cloudBase, outfile);
+            }
+
+        if (errorText==true)//so the next function would only appear when statement is true
+        error_text(outfile);//error message box
+
+        infile.close();//lines 45 and 46 to close both files
+        outfile.close();
+        return 0;
+    }
+
+    void file_test(ifstream2 infile, ofstream2 outfile)
+    {
+        infile.open ("weatherData.txt");//opens the file
+        if (infile.fail())//tests the file
+            {
+            cout<<"Input file opening failed." << endl;
+            exit(1);
+            }
+        outfile.open ("antonioHernandez.txt");//opens the file
+        if (outfile.fail())//tests the file
+            {
+            cout<< "Output file opening failed." << endl;
+            exit(1);
+            }
+    }
+
+    void show_task(ofstream2 outfile)//opening text
+    {
+        cout<< "Project #1 - Weather Data Program" <<endl;
+        cout<< endl;
+        cout<< " Temperature" << setw(12) << "Wind Speed" << setw(12) << "Dew Point" << setw(12) << "Wind Chill" << setw(12) << "Cloud Base"<< endl;
+        cout<< " -------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<< endl;
+
+        outfile<< "Project #1 - Weather Data Program" <<endl;
+        outfile<< endl;
+        outfile<< " Temperature" << setw(12) << "Wind Speed" << setw(12) << "Dew Point" << setw(12) << "Wind Chill" << setw(12) << "Cloud Base"<< endl;
+        outfile<< " -------------------------------------------------------------------------------------------------------------"<<endl;
+        outfile<< endl;
+    }
+
+    double compute_Windchill(double fTemp, double windSpeed)
+    {
+        double windChill, modWindSpeed;
+        modWindSpeed= pow(windSpeed, .16); // 56 and 57 absurd lines to represent an absurd formula to calculate wind chill
+        windChill= 35.74 + (0.6215 * fTemp) - (35.75 * modWindSpeed) + 0.4275 * fTemp * modWindSpeed;
+        return(windChill);
+
+    }
+
+    double compute_Cloudbase (double fTemp, double dewPoint)
+    {
+        double cloudBase;
+        cloudBase = (fTemp - dewPoint) / 4.4 * 1000;
+        return (cloudBase);
+    }
+
+    void give_output(double2 fTemp, double2 windSpeed, double2 dewPoint, double2 windChill, double2 cloudBase, ofstream2 outfile) // to return multiple values into main, no & in text
+    {
+        cout<< setprecision(1)<< fixed; //set the amount of decimal places
+
+
+        if (fTemp <= 50 && windSpeed > 3)//setw() makes the spacing
+            cout<< setw(6) <<fTemp<<" dF" << setw(10) << windSpeed<<" mph" << setw(10) << dewPoint<<" dF" << setw(9) << windChill<<" dF" << setw(12) << cloudBase<<" ft"<< endl;
+
+        else
+            cout<< setw(6) <<fTemp<<" dF" << setw(10) << windSpeed<<" mph" << setw(10) << dewPoint<<" dF" << setw(9) << "***" << setw(15) << cloudBase<<" ft"<< endl;
+
+
+        outfile<< setprecision(1)<< fixed; //set the amount of decimal places
+
+
+        if (fTemp <= 50 && windSpeed > 3)
+            outfile<< setw(6) <<fTemp<<" dF" << setw(10) << windSpeed<<" mph" << setw(10) << dewPoint<<" dF" << setw(9) << windChill<<" dF" << setw(12) << cloudBase<<" ft"<< endl;
+
+        else
+            outfile<< setw(6) <<fTemp<<" dF" << setw(10) << windSpeed<<" mph" << setw(10) << dewPoint<<" dF" << setw(9) << "***" << setw(15) << cloudBase<<" ft"<< endl;
+
+    }
+
+    void error_text(ofstream2 outfile)//to give error message only when there is no wind chill factor
+    {
+
+        cout<< endl;
+        cout<< "*** There is no wind chill factor at this temperature or wind speed. ***" <<endl;
+        cout<<endl;
+        cout<< endl;
+        cout<< " *** Temperature must be 50 degrees or less, and wind speed"<<endl;
+        cout<<"       "<< " must be > 3 mph to compute wind chill. "<<endl;
+        cout<< endl;
+
+        outfile<< "*** There is no wind chill factor at this temperature or wind speed. ***" <<endl;
+        outfile<<endl;
+        outfile<< endl;
+        outfile<< " *** Temperature must be 50 degrees or less, and wind speed"<<endl;
+        outfile<<"       "<< " must be > 3 mph to compute wind chill. "<<endl;
+
+    }
