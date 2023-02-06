@@ -1,0 +1,159 @@
+//Antonio Hernandez CSE 110-104 Project 2
+   //Design and develop a program that simulates the effect of rain on a flood plain.
+    #include <iostream>
+    #include <windows.h> //for color
+    #include <iomanip>// to set decimal places
+    #include "Project2header.h"
+
+    using namespace std;
+
+    int main()
+    {
+
+    int hoursRained;
+    double rainFall;
+
+    double floodPlainArray[18][18]={
+    { 12, 13, 14, 15, 16, 16, 16, 17, 17, 18, 18, 19, 20, 20, 20, 19, 18, 18 },
+    { 12, 12, 13, 14, 15, 16, 14, 15, 15, 16, 18, 19, 20, 20, 20, 19, 17, 16 },
+    { 11, 11, 12, 13, 14, 15, 14, 13, 13, 14, 16, 19, 20, 20, 20, 19, 17, 16 },
+    { 10, 10, 11, 12, 13, 14, 12, 10, 11, 11, 11, 12, 18, 14, 12, 12, 15, 16 },
+    { 10, 10, 10, 11, 12, 11, 10, 8, 9, 8, 7, 11, 14, 12, 12, 12, 14, 15 },
+    { 9, 10, 10, 11, 11, 12, 8, 6, 6, 5, 5, 8, 12, 12, 11, 12, 14, 15 },
+    { 8, 10, 10, 10, 10, 8, 6, 5, 5, 5, 6, 10, 10, 10, 11, 13, 13, 15 },
+    { 7, 7, 7, 6, 5, 4, 4, 4, 5, 6, 7, 10, 10, 10, 10, 13, 14, 16 },
+    { 6, 6, 5, 5, 4, 3, 3, 4, 5, 6, 8, 10, 10, 10, 10, 11, 12, 12 },
+    { 6, 6, 5, 5, 4, 3, 4, 5, 6, 7, 10, 10, 11, 12, 12, 19, 14, 16 },
+    { 8, 6, 5, 6, 6, 4, 5, 5, 6, 8, 10, 10, 10, 10, 11, 19, 15, 17 },
+    { 10, 7, 6, 7, 7, 5, 6, 5, 7, 9, 10, 10, 10, 10, 12, 19, 16, 18 },
+    { 11, 8, 7, 8, 8, 6, 8, 9, 10, 12, 15, 16, 16, 17, 15, 16, 17, 18 },
+    { 12, 10, 8, 10, 10, 7, 9, 10, 12, 15, 16, 16, 17, 17, 16, 17, 18, 18 },
+    { 13, 12, 10, 10, 10, 8, 9, 10, 12, 15, 16, 16, 17, 17, 18, 19, 18, 18 },
+    { 13, 13, 12, 12, 12, 10, 10, 11, 13, 15, 16, 16, 17, 17, 18, 19, 18, 18 },
+    { 13, 13, 12, 12, 12, 10, 10, 11, 13, 15, 16, 16, 17, 17, 19, 19, 18, 18 },
+    { 14, 13, 13, 12, 12, 12, 12, 13, 14, 15, 16, 16, 17, 17, 20, 19, 18, 18 }};
+
+
+    get_input(rainFall, hoursRained, floodPlainArray);
+    raining_flood_plain(rainFall, hoursRained, floodPlainArray);
+
+    return 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef PROJECT2HEADER_H_INCLUDED
+#define PROJECT2HEADER_H_INCLUDED
+#include <iostream>
+#include <windows.h> //for color
+#include <iomanip>// to set decimal places
+#include <cstdlib>
+
+using namespace std;
+
+HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE); // assigns the handle of the console window to consoleHandle
+
+
+void get_input(double2 rainFall, int2 hoursRained, double floodPlainArray[][18])
+{
+    double waterLevel= 0;
+    for(int x=0; x<18; x++)
+            {
+                for(int y=0; y<18; y++)
+                {
+                        if (floodPlainArray[x][y] <= waterLevel)
+                        {
+                            SetConsoleTextAttribute(consoleHandle, 9);
+                            cout<< "  *";
+                        }
+                        else
+                        {
+                            SetConsoleTextAttribute(consoleHandle, 10);
+                            cout<< "  +";
+                        }
+                }
+                cout<< endl;
+            }
+    SetConsoleTextAttribute(consoleHandle, 15);
+    cout<< endl;
+    cout<< "  Flood Plain Simulation - Press enter to begin:" << endl;
+    cout<< endl;
+    cout<< "  Enter the rainfall in inches per hour:";
+    cin>> rainFall;
+    cout<< endl;
+    cout<<"  Enter how many hours the rain is expected to last:";
+    cin>> hoursRained;
+}
+
+void raining_flood_plain(double2 rainFall, int2 hoursRained, double floodPlainArray[][18])
+{
+    int timeElapsed= 0;
+    double accumulation, waterLevel= 0;
+
+    for(int index= 0; waterLevel>= 0; index++)
+    {
+            timeElapsed= index;
+            if(timeElapsed <= hoursRained)
+           {
+            accumulation= rainFall * timeElapsed;
+            waterLevel= accumulation;
+           }
+           else
+           {
+                  waterLevel= waterLevel - 4;
+           }
+
+            for(int x=0; x<18; x++)
+            {
+                for(int y=0; y<18; y++)
+                {
+                        if (floodPlainArray[x][y] <= waterLevel)
+                        {
+                            SetConsoleTextAttribute(consoleHandle, 9);
+                            cout<< "  *";
+                        }
+                        else
+                        {
+                            SetConsoleTextAttribute(consoleHandle, 10);
+                            cout<< "  +";
+                        }
+                }
+                cout<< endl;
+            }
+
+        SetConsoleTextAttribute(consoleHandle, 15);
+        cout<< setprecision(1) << fixed;
+        cout<< "  Total rain fall is "<< accumulation << setw(7);
+        cout<< "   Time elapsed is " << timeElapsed << " hours." << endl;
+        cout<< endl;
+
+        if (waterLevel>0)
+            cout<< "  The water level is "<< waterLevel << " inches above sea level." << endl;
+        else
+            cout<< "  The water level is 0 inches above sea level." << endl;
+
+        if(timeElapsed>=hoursRained)
+        {
+            cout<< endl;
+            cout<< "<< The Rain ended after "<< hoursRained << " hours >>" << endl;
+        }
+
+        cin.get();
+        system("CLS");
+    }
+}
+
+
+
+#endif // PROJECT2HEADER_H_INCLUDED
