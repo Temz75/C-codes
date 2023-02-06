@@ -1,0 +1,141 @@
+   //Antonio Hernandez CSE 110-104 Project 3
+    //Password validation
+    #include <iostream>
+    #include <string>
+    #include "Project 3 h.h"
+
+    using namespace std;
+
+    int main()
+    {
+        string passAttempt;
+        bool validPass=false;
+        bool longEnough, foundUpper, foundLower, foundDigit;
+        int attempts=0;
+
+        while((validPass==false)&&(attempts<3))
+         {
+            attempts++; //counts the tries
+            cout<< "You have " << 4 - attempts << " tries remaining!";
+
+            get_input(passAttempt);//gets password
+
+            validPass= validate_pass(passAttempt, longEnough, foundUpper, foundLower, foundDigit);//checks password
+
+            output_valid(passAttempt, validPass, longEnough, foundUpper, foundLower, foundDigit);//displays results
+
+            if(validPass==true)
+                validPass= confirm_entry(passAttempt);//checks 2nd attempt
+         }
+
+        if((validPass==false)&&(attempts=3))
+            cout<<endl<<" >>>> That was the third attempt. This session has been locked. <<<<"<<endl;
+
+        return 0;
+    }
+
+
+
+
+    #ifndef PROJECT_3_H_H_INCLUDED
+    #define PROJECT_3_H_H_INCLUDED
+    #include<iostream>
+    #include<string>
+    using namespace std;
+
+    void get_input(string2 passAttempt)
+    {
+        cout<<" -----------------------"<<endl;
+        cout<<" Enter a password that contains:"<<endl;
+        cout<<" At least 8 characters long, including"<<endl;
+        cout<<" at least one number,"<<endl;
+        cout<<" at least one upper case letter,"<<endl;
+        cout<<" and at least one lower case letter."<<endl;
+        cout<<endl;
+        cout<< " Password:";
+        cin>> passAttempt;
+    }
+
+    bool validate_pass(string2 passAttempt,bool2 longEnough,bool2 foundUpper,bool2 foundLower,bool2 foundDigit)
+    {
+       longEnough=false; //set them all to false
+       foundUpper=false;
+       foundLower=false;
+       foundDigit=false;
+
+       int stringLength= passAttempt.length();
+
+       if(stringLength>7)
+        longEnough=true; //checks the length and changes it to true if it matches
+
+       for(int index=0; index<stringLength; index++)
+       {
+           if(isupper(passAttempt[index]))
+            foundUpper=true;
+
+           if(islower(passAttempt[index]))
+            foundLower=true;
+
+           if(isdigit(passAttempt[index]))
+            foundDigit=true;
+       }
+
+       return(longEnough && foundUpper && foundLower && foundDigit);//return the new compilation of them all (returns that they are true if true)
+
+    }
+
+    void output_valid(string passAttempt,bool validPass,bool longEnough,bool foundUpper,bool foundLower,bool foundDigit)
+    {
+        if(validPass == false)
+          {
+            cout<< endl <<" "<< passAttempt << " is not a valid password."<<endl;
+
+            if(!longEnough)
+                cout<< " It does not contain at least 8 characters."<<endl;
+
+            if(!foundUpper)
+                cout<< " It does not contain an upper case letter."<<endl;
+
+            if(!foundLower)
+                cout<< " It does not contain a lower case letter."<<endl;
+
+            if(!foundDigit)
+                cout<< " It does not contain a number."<<endl;
+
+            cout<<endl<<endl;
+          }
+        else
+          {
+            cout<<passAttempt<< " is a good password"<<endl;
+            cout<<endl;
+          }
+    }
+
+    bool confirm_entry(string& passAttempt)
+    {
+        string reEntry;
+
+        cout<<" Re-enter the password for validation:";
+        cin>>reEntry;
+
+        if(reEntry!=passAttempt)
+          {
+            cout<<endl; // \"" (value) "\" encompasses the value with ""s without changing it into a quote
+            cout<< "<<< This password\"" << reEntry << "\"does not match the first entry. \"" << passAttempt << "\" >>>";
+
+            return(false);
+          }
+        else
+          {
+            cout<< endl<< " **** The password has been approved. ****"<< endl<<endl;
+
+            return(true);
+          }
+    }
+
+
+
+
+
+
+    #endif // PROJECT_3_H_H_INCLUDED
