@@ -1,0 +1,133 @@
+//Antonio Hernandez CSE 110-104 Lab 7
+//Create a multi-file program that reads in a series of sales dollar amounts from a file. Stores, processes and outputs the amount in an array to a file and the console window.
+
+#include <iostream>
+#include <iomanip>// to set decimal places
+#include <cstdlib> //To use exit statements to test files
+#include <fstream> //To open and close files
+#include "Lab7File2.h" //to include multi file programs
+
+using namespace std;
+
+int main()
+{
+    ifstream infile;
+    ofstream outfile;
+    int filledSlots= 0, arraySize;
+    double salesValue[20], total;
+    file_test( infile, outfile);
+    fill_array( infile, salesValue, filledSlots, arraySize);
+    bubble_sort( salesValue, filledSlots);
+    total = get_total(salesValue, filledSlots);
+    give_ouput( outfile, salesValue, filledSlots, total);
+    infile.close();
+    outfile.close();
+    return 0;
+}
+
+
+
+
+#ifndef LAB7FILE2_H_INCLUDED
+#define LAB7FILE2_H_INCLUDED
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+
+void file_test(ifstream2 infile, ofstream2 outfile)
+{
+    infile.open ("salesAmounts.txt");//opens the file
+    if (infile.fail())//tests the file
+        {
+        cout<<"Input file opening failed." << endl;
+        exit(1);
+        }
+    outfile.open ("antonioHernandez.txt");//opens the file
+    if (outfile.fail())//tests the file
+        {
+        cout<< "Output file opening failed." << endl;
+        exit(1);
+        }
+}
+
+
+void fill_array(ifstream2 infile,double salesValue[], int2 filledSlots, int arraySize)
+{
+    int index=0;
+    double nextValue;
+    infile>> nextValue;
+    while (!infile.eof() && (index < arraySize))//must redeclare int since there are no declarations
+    {
+        salesValue[index]=nextValue; //temporary localized value to overwrite data in the spot
+         index++;
+         infile>> nextValue;
+
+    }
+
+    filledSlots = index;
+}
+
+
+ void bubble_sort(double salesValue[], int filledSlots)
+{
+    for (int i = filledSlots - 1; i > 0; i--)//gets high to low
+       for (int j = 0; j < i; j++)
+            if (salesValue[j] > salesValue[j + 1])//swaps the numbers
+                {
+                double temporary = salesValue[j+1];
+                salesValue[j+1] = salesValue[j];
+                salesValue[j] = temporary;
+                }
+}
+
+
+double get_total(double salesValue[],int2 filledSlots)
+{
+    int index= 0;
+    double total = 0;
+    while (index < filledSlots)
+    {
+        total = total + salesValue[index];
+        index++;
+    }
+    return total;
+}
+
+
+void give_ouput(ofstream2 outfile, double salesValue[], int filledSlots, double total)
+{
+    cout<< setprecision(2) << fixed;
+    cout<< "The number of sales amounts is: " << filledSlots<<endl;
+    cout<< "The smallest sales amount is: $" << salesValue[0]<<endl;
+    cout<<" "<<endl;
+    cout<< "The largest sales amount is: $" << salesValue[filledSlots-1]<<endl;
+    cout<<" "<<endl;
+    cout<< "The sales amount sorted from lowest to highest:"<<endl;
+
+    outfile<< setprecision(2) << fixed;
+    outfile<< "The number of sales amounts is: " << filledSlots <<endl;
+    outfile<< "The smallest sales amount is: $" << salesValue[0]<<endl;
+    outfile<<" "<<endl;
+    outfile<< "The largest sales amount is: $" << salesValue[filledSlots-1]<<endl;
+    outfile<<" "<<endl;
+    outfile<< "The sales amount sorted from lowest to highest:"<<endl;
+
+    int arraySlot= 0;
+
+    while(arraySlot< filledSlots)//this will display each of the sales down the line
+    {
+       cout<< setw(16) << " $" << salesValue[arraySlot]<< endl;
+       outfile<< setw(16) << " $" << salesValue[arraySlot]<< endl;
+       arraySlot++;
+    }
+
+    cout<< "---------------------------------------------------"<<endl;
+    cout<< "Total: $" << total <<endl;
+
+    outfile<< "---------------------------------------------------"<<endl;
+    outfile<< "Total: $" << total <<endl;
+}
+
+#endif //LAB7FILE2_H INCLUDED
