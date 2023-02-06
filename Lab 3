@@ -1,0 +1,84 @@
+//Antonio Hernandez CSE 110 Lab#3
+//This lab is an extension of Lab#2
+//This program computes payroll using hours and pay rate and calculates after tax
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+double compute_tax(double grossPay, int numDependents);//function declaration
+
+int main()
+{
+int hoursWorked, doubletimeHours, overtimeHours, numDependents, holdPercentage; //time in here to keep them as whole numbers
+double hourlyRate, basePay, doubletimePay, overtimePay, grossPay, netPay, taxAmount; //doubletimePay is overtime at 2x the pay rate above 50 hours, overtime is 1.5x the pay rate between 41-50
+
+cout<< "Enter the hourly rate of pay: $";
+cin>> hourlyRate;
+
+cout<< "Enter number of dependents:";
+cin>> numDependents;
+
+cout<< "Enter the number of hours worked, "<< endl;
+cout<< "rounded to a whole number of hours: ";
+cin>> hoursWorked; //added the {} brackets to clean everything up
+    if (hoursWorked<=40) //there is no overtime
+       {overtimePay=0;
+        overtimeHours=0;
+        doubletimePay=0;
+        doubletimeHours=0;
+        basePay= hoursWorked * hourlyRate;
+       }
+    else if (hoursWorked>=41 && hoursWorked <=50) //there is overtime
+        {overtimePay= (hoursWorked - 40) * (1.50 * hourlyRate);
+        overtimeHours= (hoursWorked-40);
+        basePay=(40 * hourlyRate);
+        doubletimePay=0;
+        doubletimeHours=0;
+        }
+    else if (hoursWorked>=51) //there is doubletime
+        {overtimeHours=10;
+        overtimePay= (10 * 1.50 * hourlyRate);
+        doubletimeHours= (hoursWorked - 50);
+        doubletimePay= (hoursWorked - 50) * (2.00 * hourlyRate);
+        basePay=(40 * hourlyRate);
+        }
+
+grossPay= overtimePay + doubletimePay + basePay; //calculate gross pay
+
+taxAmount= compute_tax( grossPay, numDependents);//function call here, make sure each copy has the same line order
+
+netPay= grossPay - taxAmount;
+
+cout<< setprecision(2)<< fixed; //to set the amount of decimal places
+cout<< "Hours worked=" << hoursWorked << endl;
+cout<< "Hourly rate=$" << hourlyRate << endl;
+cout<< "Base pay=$" << basePay << endl;
+cout<< "Overtime hours at time and a half=" << overtimeHours << endl;
+cout<< "Overtime pay at time and a half=$" << overtimePay << endl;
+cout<< "Overtime hours at double time=" << doubletimeHours << endl;
+cout<< "Overtime pay at double time=$" << doubletimePay << endl;
+cout<< "Tax Withholding Amount=$" << taxAmount << endl;
+cout<< "Gross pay=$" << grossPay << endl;
+cout<< "Net pay=$" << netPay << endl;
+
+    return 0;
+}
+
+//function definition
+double compute_tax(double grossPay, int numDependents)
+{
+    double myTax, holdPercentage; // comma before the holdPercentage makes it temporary
+    if (numDependents >= 3)
+        holdPercentage = .15;
+    else if (numDependents == 2)
+        holdPercentage = .18;
+    else if (numDependents == 1)
+        holdPercentage = .20;
+    else
+        holdPercentage = .28;
+
+    myTax = holdPercentage * grossPay;
+
+    return(myTax);
+}
