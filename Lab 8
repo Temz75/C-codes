@@ -1,0 +1,90 @@
+   // Antonio Hernandez CSE-110-104 Lab 8
+   //To decode an encrypted message with strings
+    #include <iostream>
+    #include <cstdlib> //To use exit statements to test files
+    #include <fstream> //To open and close files
+    #include <string> //to use strings, much easier  than cstring
+    #include "Lab8h.h"
+    using namespace std;
+
+
+
+
+
+    int main()
+    {
+        ifstream infile;
+        ofstream outfile;
+        file_test(infile, outfile);
+        text_decoder(infile);
+
+        return 0;
+    }
+
+
+
+    #ifndef LAB8H_H_INCLUDED
+    #define LAB8H_H_INCLUDED
+    #include <fstream> //To open and close files
+    #include <string> //to use strings, much easier  than cstring
+    #include <cstdlib> //To use exit statements to test files
+
+    using namespace std;
+
+    void file_test(ifstream2 infile, ofstream2 outfile)
+    {
+        infile.open ("encrypted.txt");//opens the file
+            if (infile.fail())//tests the file
+                {
+                cout<<"Input file opening failed." << endl;
+                exit(1);
+                }
+    }
+
+    void text_decoder(ifstream2 infile)
+    {
+        string myString, agentName=""; //"" makes this an empty string
+        char converted;
+        int event=0, year=0;
+        infile>> myString;
+
+            for(int i = 0; i < myString.length(); i++)// gets the string length
+            {
+                if (i % 2 ==0)  //the % (remainder) makes it so that every other letter subtracts 9, then adds 3.
+                    converted = myString[i]-9; //changes a string into a char
+
+                else
+                    converted = myString[i]+3;
+
+                if(converted == '_')
+                    converted= ' ';
+
+                if(converted == ';')
+                    cout<<endl<<endl;
+                else
+                    cout<< converted;
+
+                if(isupper(converted))
+                    event++;
+
+                if(isdigit(converted))
+                    year++;
+
+               if(i % 41 == 0)
+                    agentName = agentName +  converted;
+
+        } //end of for loop
+
+        int day=event%10;
+        int month=event/10;
+
+        cout<< "The event date is "<< day << "/" << month << "/" << year << endl;
+        cout<< endl;
+        cout<< "The agent is "<< agentName << endl;
+    }
+
+
+
+
+
+    #endif // LAB8H_H_INCLUDED
