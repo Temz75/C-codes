@@ -1,0 +1,35 @@
+//Antonio Hernandez CSE 110 Lab#1
+//This program computes payroll using hours and pay rate
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+int hoursWorked;
+double hourlyRate, basePay, overtimePay, grossPay;
+
+cout<< "Enter the hourly rate of pay: $";
+cin>> hourlyRate;
+
+cout<< "Enter the number of hours worked, "<<endl;
+cout<< "rounded to a whole number of hours: ";
+cin>> hoursWorked;
+    if (hoursWorked<=40)
+       overtimePay=0, basePay= hoursWorked * hourlyRate;
+
+    else
+        overtimePay= (hoursWorked - 40) * (1.5 * hourlyRate), basePay=(40 * hourlyRate);
+
+
+
+grossPay= overtimePay + basePay; //calculate gross pay
+
+cout<< "Hours worked=" << hoursWorked << endl;
+cout<< "Hourly rate=$"<< hourlyRate<< endl;
+cout<< "Base pay=$"<< basePay<< endl;
+cout<< "Overtime pay=$"<< overtimePay<< endl;
+cout<< "Gross pay=$"<< grossPay<< endl;
+
+    return 0;
+}
